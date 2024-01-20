@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import { Loading } from 'notiflix';
+import "notiflix/dist/notiflix-3.2.7.min.css"
 
 import * as ImageService from 'service/image-service';
 import { Button, SearchForm, Grid, GridItem, Text, CardItem } from 'components';
@@ -23,6 +25,7 @@ export class Gallery extends Component {
 
   getPhotos = async (q, p) => {
     this.setState({ isLoading: true });
+    Loading.standard();
     try {
       const { photos, total_results } = await ImageService.getImages(q, p);
       console.log(photos);
@@ -34,6 +37,7 @@ export class Gallery extends Component {
       this.setState({ error: error.message });
     } finally {
       this.setState({ isLoading: false });
+      Loading.remove();
     }
   };
 
@@ -60,7 +64,7 @@ export class Gallery extends Component {
     return (
       <>
         <SearchForm onSubmit={this.onSubmit} />
-        {isLoading && <Text textAlign="center">...Loading</Text>}
+        {/* {isLoading && <Text textAlign="center">...Loading</Text>} */}
         {error && <Text textAlign="center">{error}</Text>}
         {images.length === 0 && query !== '' && (
           <Text textAlign="center">{query} запиту немає</Text>
